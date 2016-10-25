@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <head>
-  <script type='text/javascript' src='js/knocks/knockout-3.4.0.js'></script>
+<head>
+  <title></title>
+
     <style>
+
       html,
       body {
         font-family: Arial, sans-serif;
@@ -82,6 +84,7 @@
         width: 24%;
       }
     </style>
+    <script src="js/knocks/knockout-3.4.0.js"></script>
   </head>
   <body>
     <div class="container">
@@ -97,13 +100,16 @@
           <input id="zoom-to-area" type="button" value="Search">
         </div>
       </div>
+
+      <!-- list view -->
+      <!-- http://knockoutjs.com/documentation/foreach-binding.html -->
+      
       <div id="map"></div>
     </div>
-    <script type="text/javascript" src="js/main.js" difer></script>
+    <script src="js/map.js"></script>
 
     <script async defer
-        src=
-        "https://maps.googleapis.com/maps/api/js?libraries=geometry,drawing&key=MYAPIKEY&v=3&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?libraries=geometry,drawing&key=[YOUR_API_KEY]&callback=initMap">
     </script>
 
   </body>
