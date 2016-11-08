@@ -99,6 +99,9 @@
           <input id="zoom-to-area-text" type="text" placeholder="Enter your home adress!">
           <input id="zoom-to-area" type="button" value="Search">
         </div>
+        <div>
+          <select id="zoom-to-area" data-bind="options: $root.districtArray, value: 'districtName'"></select> 
+        </div>
       </div>
 
       <!-- list view -->
@@ -107,6 +110,7 @@
       <div id="map"></div>
     </div>
     <script src="js/map.js"></script>
+    <script type="js/main.js"></script>
 
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?libraries=geometry,drawing&key=AIzaSyBKVPJXwoLKC0idf4jDh5RxwqcQxIPlq90&callback=initMap">

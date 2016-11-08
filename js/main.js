@@ -1,6 +1,6 @@
 var ViewModel = function() {
     var self = this;
-    self.districtArray = ko.observableArray();
+    self.districtArray = ko.observableArray([]);
     var dist1 = {lat: 42.879857, lng: -124.176448};
     var dist2 = {lat: 42.889406, lng: -123.187681};
     var dist3 = {lat: 42.267278, lng: -123.484847};
@@ -62,17 +62,75 @@ var ViewModel = function() {
     var dist59 = {lat: 44.675208, lng: -122.484847};
     var dist60 = {lat: 43.350331, lng: -118.463981};
 
-districtArray.push(dist1, dist2, dist3, dist4, dist5, dist6, dist7, dist8, dist9, dist10, dist11, dist12, dist13, dist14, 
-    dist15, dist16, dist17, dist18, dist19, dist20, dist21, dist22, dist23, dist24, dist25, dist26, dist27, dist28, dist29, 
-    dist30, dist31, dist32, dist33, dist34, dist35, dist36, dist37, dist38, dist39, dist40, dist41, dist42, dist43, dist44, 
-    dist45, dist46, dist47, dist48, dist49, dist50, dist51, dist52, dist53, dist54, dist55, dist56, dist57, dist58, dist59, 
-    dist60);
+	districtArray.push(dist1, dist2, dist3, dist4, dist5, dist6, dist7, dist8, dist9, dist10, dist11, dist12, dist13, dist14, 
+    	dist15, dist16, dist17, dist18, dist19, dist20, dist21, dist22, dist23, dist24, dist25, dist26, dist27, dist28, dist29, 
+    	dist30, dist31, dist32, dist33, dist34, dist35, dist36, dist37, dist38, dist39, dist40, dist41, dist42, dist43, dist44, 
+    	dist45, dist46, dist47, dist48, dist49, dist50, dist51, dist52, dist53, dist54, dist55, dist56, dist57, dist58, dist59, 
+    	dist60);
+	self.districtNames = [
+		{districtName: "House District 1"},
+		{districtName: "House District 2"},
+		{districtName: "House District 3"},
+		{districtName: "House District 4"},
+		{districtName: "House District 5"},
+		{districtName: "House District 6"},
+		{districtName: "House District 7"},
+		{districtName: "House District 8"},
+		{districtName: "House District 9"},
+		{districtName: "House District 10"},
+		{districtName: "House District 11"},
+		{districtName: "House District 12"},
+		{districtName: "House District 13"},
+		{districtName: "House District 14"},
+		{districtName: "House District 15"},
+		{districtName: "House District 16"},
+		{districtName: "House District 17"},
+		{districtName: "House District 18"},
+		{districtName: "House District 19"},
+		{districtName: "House District 20"},
+		{districtName: "House District 21"},
+		{districtName: "House District 22"},
+		{districtName: "House District 23"},
+		{districtName: "House District 24"},
+		{districtName: "House District 25"},
+		{districtName: "House District 26"},
+		{districtName: "House District 27"},
+		{districtName: "House District 28"},
+		{districtName: "House District 29"},
+		{districtName: "House District 30"},
+		{districtName: "House District 31"},
+		{districtName: "House District 32"},
+		{districtName: "House District 33"},
+		{districtName: "House District 34"},
+		{districtName: "House District 35"},
+		{districtName: "House District 36"},
+		{districtName: "House District 37"},
+		{districtName: "House District 38"},
+		{districtName: "House District 39"},
+		{districtName: "House District 40"},
+		{districtName: "House District 41"},
+		{districtName: "House District 42"},
+		{districtName: "House District 43"},
+		{districtName: "House District 44"},
+		{districtName: "House District 45"},
+		{districtName: "House District 46"},
+		{districtName: "House District 47"},
+		{districtName: "House District 48"},
+		{districtName: "House District 49"},
+		{districtName: "House District 50"},
+		{districtName: "House District 51"},
+		{districtName: "House District 52"},
+		{districtName: "House District 53"},
+		{districtName: "House District 54"},
+		{districtName: "House District 55"},
+		{districtName: "House District 56"},
+		{districtName: "House District 57"},
+		{districtName: "House District 58"},
+		{districtName: "House District 59"},
+		{districtName: "House District 60"}
+	];
 
-google.maps.event.addListener(kmlLayer, 'click', function(event) {
-		var content = event.featureData.infoWindowHtml;
-		var testimonial = document.getElementById('capture');
-		testimonial.innerHTML = content;
-	});
+
     // test
     
 

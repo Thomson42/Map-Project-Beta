@@ -2,8 +2,6 @@ var map;
 
 var src = 'https://sites.google.com/site/votercompanion/HouseDistricts2.kmz';
 
-ViewModel.districtArray;
-
 // create a locations array of location objects
 
 function initMap() {
@@ -19,6 +17,7 @@ function initMap() {
      //   styles: styles,
         mapTypeControl: false
     });
+    var pins = ViewModel.districtArray;
     loadKmlLayer(src, map);
 
     // These are the real estate listings that will be shown to the user.
@@ -89,5 +88,10 @@ function loadKmlLayer(src, map) {
 	preserveViewport: false,
 	map: map
 });
-	
+	/*google.maps.event.addListener(kmlLayer, 'click', function(event) {
+		var content = event.featureData.infoWindowHtml;
+		var testimonial = document.getElementById('capture');
+		testimonial.innerHTML = content;
+	});
+	*/
 };
