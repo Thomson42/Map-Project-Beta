@@ -1,10 +1,16 @@
-var map;
+var map,
+    infoWindow,
+    bounds;
 
 var src = 'https://sites.google.com/site/votercompanion/HouseDistricts2.kmz';
+
+//ViewModel.districtArray;
 
 // create a locations array of location objects
 
 function initMap() {
+    bounds = new google.maps.LatLngBounds();
+    infoWindow = new google.maps.InfoWindow();
     // Create a styles array to use with the map.
 
     // Constructor creates a new map - only center and zoom are required.
@@ -17,7 +23,6 @@ function initMap() {
      //   styles: styles,
         mapTypeControl: false
     });
-    var pins = ViewModel.districtArray;
     loadKmlLayer(src, map);
 
     // These are the real estate listings that will be shown to the user.
@@ -50,23 +55,32 @@ function initMap() {
         // Push the marker to our array of markers.
         markers.push(marker);
         // Create an onclick event to open the large infowindow at each marker.
-        marker.addListener('click', function() {
-            populateInfoWindow(this, largeInfowindow);
-        });
-        // Two event listeners - one for mouseover, one for mouseout,
-        // to change the colors back and forth.
-        marker.addListener('mouseover', function() {
-            this.setIcon(highlightedIcon);
-        });
-        marker.addListener('mouseout', function() {
-            this.setIcon(defaultIcon);
-        });
+        // marker.addListener('click', function() {
+        //     populateInfoWindow(this, largeInfowindow);
+        // });
+        // // Two event listeners - one for mouseover, one for mouseout,
+        // // to change the colors back and forth.
+        // marker.addListener('mouseover', function() {
+        //     this.setIcon(highlightedIcon);
+        // });
+        // marker.addListener('mouseout', function() {
+        //     this.setIcon(defaultIcon);
+        // });
     }
+
+    myViewModel.districtArray().forEach(function(district) {
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(district.lat, district.lng),
+            animation: google.maps.Animation.DROP,
+            map: map
+        });
+    });
 
 
     // This function populates the infowindow when the marker is clicked. We'll only allow
     // one infowindow which will open at the marker that is clicked, and populate based
     // on that markers position.
+    google.maps.event.addListener(map, "click", function() { infoWindow.close();});
     
 }
 
@@ -77,21 +91,17 @@ function populateInfoWindow(marker, infowindow) {
             infowindow.setContent('');
             infowindow.marker = marker;
             // Make sure the marker property is cleared if the infowindow is closed.
-            infowindow.addListener('closeclick', function() {
-                infowindow.marker = null;
-            });
+            // infowindow.addListener('closeclick', function() {
+            //     infowindow.marker = null;
+            // });
 
      }
 }
 function loadKmlLayer(src, map) {
 	var kmlLayer = new google.maps.KmlLayer(src, {
-	preserveViewport: false,
-	map: map
-});
-	/*google.maps.event.addListener(kmlLayer, 'click', function(event) {
-		var content = event.featureData.infoWindowHtml;
-		var testimonial = document.getElementById('capture');
-		testimonial.innerHTML = content;
-	});
-	*/
+	   preserveViewport: false,
+	   map: map,
+       suppressInfoWindows: true
+    });
+
 };

@@ -100,17 +100,21 @@
           <input id="zoom-to-area" type="button" value="Search">
         </div>
         <div>
-          <select id="zoom-to-area" data-bind="options: $root.districtArray, value: 'districtName'"></select> 
+        <ul data-bind="foreach: districtArray">
+          <li data-bind="text: title"></li>
+        </ul>
         </div>
       </div>
+
 
       <!-- list view -->
       <!-- http://knockoutjs.com/documentation/foreach-binding.html -->
       
       <div id="map"></div>
     </div>
+    <script src="js/main.js"></script>
     <script src="js/map.js"></script>
-    <script type="js/main.js"></script>
+    
 
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?libraries=geometry,drawing&key=AIzaSyBKVPJXwoLKC0idf4jDh5RxwqcQxIPlq90&callback=initMap">
