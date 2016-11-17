@@ -84,6 +84,7 @@
       }
     </style>
     <script src="js/knocks/knockout-3.4.0.js"></script>
+    <script src="http://api.votesmart.org/CandidateBio.getBio?key=<011c5adb36d0e7b3335a1f1e0f5bb94a>&candidateId=9490">barack obama</script>
   </head>
   <body>
     <div class="container">
@@ -99,7 +100,7 @@
           <input id="zoom-to-area" type="button" value="Search">
         </div>
         <div>
-        <ul data-bind="foreach: districtArray">
+        <ul data-bind="foreach: koDistrictArray">
           <li data-bind="text: title"></li>
         </ul>
         </div>
@@ -111,8 +112,8 @@
       
       <div id="map"></div>
     </div>
-    <script src="js/main.js"></script>
     <script src="js/map.js"></script>
+    <script src="js/main.js"></script>
     
 
     <script async defer

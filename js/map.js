@@ -1,5 +1,5 @@
 var map;
-var infowindow = null;
+var infoWindow = null;
 var bounds;
 var marker;
 
@@ -22,7 +22,70 @@ function initMap() {
     loadKmlLayer(src, map);
     setMarkers(map, districtArray);
     infoWindow = new google.maps.InfoWindow({
-    	content: '<div id="content">'+
+    	content: 'Loading...'
+    });
+
+};
+    // These are the real estate listings that will be shown to the user.
+    // Normally we'd have these in a database instead.
+
+    // This function populates the infowindow when the marker is clicked. We'll only allow
+    // one infowindow which will open at the marker that is clicked, and populate based
+    // on that markers position.
+
+function setMarkers(map, markers)    {
+	for (var i = 0; i < markers.length; i++) {
+	// Get the position from the location array.
+		var districtArray = markers[i];
+		var distPosit = new google.maps.LatLng(districtArray[0], districtArray[1]);
+		// Create a marker per location, and put into markers array.
+
+		var marker = new google.maps.Marker({
+			position: distPosit,
+			title: districtArray[2],
+			html: districtArray[3],
+			animation: google.maps.Animation.DROP,
+			map: map,
+			id: i
+		});
+
+//Critical object that formats the string used in my Info Window needs photo image, title, name, and Link
+	google.maps.event.addListener(marker, 'click', function () {
+		// where I have added .html to the marker object.
+			infoWindow.setContent(this.html);
+			infoWindow.open(map, this);
+		});
+
+	// Push the marker to our array of markers.
+	}
+	
+
+}
+/*function toggleBounce() {
+	if (marker.getAnimation() !== null) {
+		marker.setAnimation(null);
+	} else {
+		marker.setAnimation(google.maps.Animation.BOUNCE);
+	}
+}*/
+function populateInfoWindow(marker, infowindow) {
+        
+      }
+
+function loadKmlLayer(src, map) {
+	var kmlLayer = new google.maps.KmlLayer(src, {
+	   preserveViewport: false,
+	   map: map,
+       suppressInfoWindows: true,
+       scaleControl: false,
+       zoomControl: false
+    });
+
+};
+var districtArray = [
+	[
+		42.879857, -124.176448, 
+		'House District 1', '<div id="content">'+
             '<div id="siteNotice">'+
             '</div>'+
             '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
@@ -42,129 +105,42 @@ function initMap() {
             '(last visited June 22, 2009).</p>'+
             '</div>'+
             '</div>'
-    });
-
-};
-    // These are the real estate listings that will be shown to the user.
-    // Normally we'd have these in a database instead.
-
-    // This function populates the infowindow when the marker is clicked. We'll only allow
-    // one infowindow which will open at the marker that is clicked, and populate based
-    // on that markers position.
-
-function setMarkers(map, markers)    {
-	var self = this;
-	for (var i = 0; i < markers.length; i++) {
-	// Get the position from the location array.
-		var districtArray = markers[i];
-		var distPosit = new google.maps.LatLng(districtArray[0], districtArray[1]);
-		// Create a marker per location, and put into markers array.
-		var marker = new google.maps.Marker({
-			position: distPosit,
-			title: districtArray[2],
-			html: districtArray[3],
-			animation: google.maps.Animation.DROP,
-			map: map,
-			id: i
-		});
-
-//Critical object that formats the string used in my Info Window needs photo image, title, name, and Link
-	google.maps.event.addListener(marker, 'click', function () {
-		// where I have added .html to the marker object.
-			//alert(this.html);
-			//populateInfoWindow(this);
-			console.log(districtArray[3]);
-			console.log(this.html);
-			console.log(self.html);
-			infowindow.open(map, districtArray);
-			infowindow.open(map, this);
-			infowindow.setContent(this.html);
-			infowindow.getContent(this.html);
-			//infowindow.open(map, this);
-			map.setZoom(6);
-			map.setCenter(marker.getPosition());
-			console.log(this.html);
-		});
-
-	// Push the marker to our array of markers.
-	}
-	
-	// marker.addListener('mouseover', toggleBounce);
-
-}
-/*function toggleBounce() {
-	if (marker.getAnimation() !== null) {
-		marker.setAnimation(null);
-	} else {
-		marker.setAnimation(google.maps.Animation.BOUNCE);
-	}
-}*/
-function populateInfoWindow(marker, infowindow) {
-        // Check to make sure the infowindow is not already opened on this marker.
-        if (infowindow.marker == marker) {
-          // Clear the infowindow content to give the streetview time to load.
-          infowindow.setContent('');
-          infowindow.marker = marker;
-          // Make sure the marker property is cleared if the infowindow is closed.
-          infowindow.addListener('closeclick', function() {
-            infowindow.marker = null;
-          });
-          
-          // Open the infowindow on the correct marker.
-          infowindow.open(map, marker);
-        }
-      }
-
-function loadKmlLayer(src, map) {
-	var kmlLayer = new google.maps.KmlLayer(src, {
-	   preserveViewport: false,
-	   map: map,
-       suppressInfoWindows: true,
-       scaleControl: false,
-       zoomControl: false
-    });
-
-};
-var districtArray = [
-	[
-		42.879857, -124.176448, 
-		'House District 1', 'Discription'
 	],
 	[
     	42.889406, -123.18768, 
-    	'House District 2', 'Discription'
+    	'House District 2', 'Discription2'
     ],
     [
         42.267278, -123.484847, 
-        'House District 3', 'Discription'
+        'House District 3', 'Discription3'
     ],
     [
         42.395083, -123.105353, 
-        'House District 4', 'Discription'
+        'House District 4', 'Discription4'
     ],
     [
         42.174025, -122.759428, 
-        'House District 5', 'Discription'
+        'House District 5', 'Discription5'
     ],
     [
         42.335308, -122.854325, 
-        'House District 6', 'Discription'
+        'House District 6', 'Discription6'
     ],
     [
         43.517622, -122.792728, 
-        'House District 7', 'Discription'
+        'House District 7', 'Discription7'
     ],
     [
         43.986553, -123.388908, 
-        'House District 8', 'Discription'
+        'House District 8', 'Discription8'
     ],
     [
         43.825914, -123.956883, 
-        'House District 9', 'Discription'
+        'House District 9', 'Discription9'
     ],
     [
         44.792453, -123.855322, 
-        'House District 10', 'Discription'
+        'House District 10', 'Discription10'
     ],
     [
         44.190392, -122.986928, 
