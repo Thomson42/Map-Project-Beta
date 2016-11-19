@@ -1,6 +1,23 @@
+/*
+var koDistrictArray = function(lat, lng, title) {
+    	this.koDistrictArray.push(map.districtArray);
+    	this.lat = lat;
+    	this.lng = lng;
+    	this.title = ko.observableArray(districtArray[2]);
+    	//this.discription
+    };
+    */
+
 var ViewModel = function() {
     var self = this;
-    self.koDistrictArray = ko.observableArray(districtArray);
+    self.koDistrictArray = ko.observableArray();
+
+    self.koDistrictArray.push(districtArray);
+
+
+
+
+/* 
     var dist1 = {
         title: 'House District 1'
     };
@@ -182,11 +199,13 @@ var ViewModel = function() {
         title:'House District 60'
     };
 
-    self.districtArray.push(dist1, dist2, dist3, dist4, dist5, dist6, dist7, dist8, dist9, dist10, dist11, dist12, dist13, 
+
+   self.districtArray.push(dist1, dist2, dist3, dist4, dist5, dist6, dist7, dist8, dist9, dist10, dist11, dist12, dist13, 
         dist14, dist15, dist16, dist17, dist18, dist19, dist20, dist21, dist22, dist23, dist24, dist25, dist26, dist27, 
         dist28, dist29, dist30, dist31, dist32, dist33, dist34, dist35, dist36, dist37, dist38, dist39, dist40, dist41,
         dist42, dist43, dist44, dist45, dist46, dist47, dist48, dist49, dist50, dist51, dist52, dist53, dist54, dist55,
         dist56, dist57, dist58, dist59, dist60);
+        */
     
 
 
