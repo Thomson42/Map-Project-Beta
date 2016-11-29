@@ -95,21 +95,17 @@
           <input id="hide-districts" type="button" value="Hide Districts">          
         </div>
         <hr>
-        <div>
-          <input id="zoom-to-area-text" type="text" placeholder="Enter your home adress!">
-          <input id="zoom-to-area" type="button" value="Search">
-        </div>
+        <!-- code sample adapted from Brandon Keepers at:
+        http://opensoul.org/2011/06/23/live-search-with-knockoutjs/-->
+        <form action="#">
+          <input data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off" type="search" placeholder="Enter the district your looking for!">
+        </form>
         <div>
         <ul data-bind="foreach: koDistrictArray">
           <li data-bind="text: title, click: $parent.selectMarker"></li>
         </ul>
         </div>
       </div>
-
-
-      <!-- list view -->
-      <!-- http://knockoutjs.com/documentation/foreach-binding.html -->
-      
       <div id="map"></div>
     </div>
     <script src="js/map.js"></script>

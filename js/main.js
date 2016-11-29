@@ -1,13 +1,4 @@
 /*
-var koDistrictArray = function(lat, lng, title) {
-    	this.koDistrictArray.push(map.districtArray);
-    	this.lat = lat;
-    	this.lng = lng;
-    	this.title = ko.observableArray(districtArray[2]);
-    	//this.discription
-    };
-    */
-
 var ViewModel = function() {
     var self = this;
     self.koDistrictArray = ko.observableArray();
@@ -16,18 +7,13 @@ var ViewModel = function() {
         self.koDistrictArray.push(district);
     });
 
-    self.selectMarker = function(koDistrictArray) {
-    	google.maps.event.trigger(marker, "click") 
-    };
-
-
-
-
-
-
+    self.selectMarker = function(marker) {
+        console.log(marker);
+        map.selectInfoWindow(marker);
+        };
 };
-
 
 var myViewModel = new ViewModel();
 
 ko.applyBindings(myViewModel);
+*/

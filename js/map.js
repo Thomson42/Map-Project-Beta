@@ -54,6 +54,8 @@ function setMarkers(map, markers)    {
 //Critical object that formats the string used in my Info Window needs photo image, title, name, and Link
 	loadInfoWindow(marker);
 
+    //google.maps.event.addDomListener( marker.title, "click", infoWindow.open(marker));
+
 	// Push the marker to our array of markers.
 	}
 	
@@ -67,13 +69,19 @@ function setMarkers(map, markers)    {
 	}
 }*/
 function loadInfoWindow(marker) {
-        google.maps.event.addListener(marker, 'click', function () {
-        // where I have added .html to the marker object.
-            infoWindow.setContent(this.html);
-            infoWindow.open(map, this);
-        });
+    google.maps.event.addListener(marker, 'click', function() {
+    // where I have added .html to the marker object.
+        infoWindow.setContent(this.html);
+        infoWindow.open(map, this);
+    });
 
-      }
+  };
+function selectInfoWindow(marker) {
+    google.maps.event.trigger(marker, 'click', function() {
+        google.maps.infoWindow.setContent(this.html);
+        google.maps.infoWindow.open(map, this);
+    });
+};
 
 function loadKmlLayer(src, map) {
 	var kmlLayer = new google.maps.KmlLayer(src, {
@@ -405,3 +413,31 @@ var districtArray = [
         title:'House District 60',
         html:'Discription60'
     }];
+
+var ViewModel = function() {
+    var self = this;
+    self.koDistrictArray = ko.observableArray();
+
+    districtArray.forEach(function(district) {
+        self.koDistrictArray.push(district);
+    });
+
+    self.selectMarker = function(marker) {
+        console.log(marker);
+        selectInfoWindow(marker);
+    };
+    self.query = ko.observable('');
+
+    self.search = function(value) {
+        for(var x in koDistrictArray) {
+          if(koDistrictArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+            viewModel.koDistrictArray.push(koDistrictArray[x]);
+        }
+      }
+    }
+};
+//ViewModel.query.subscribe(ViewModel.search);
+
+var myViewModel = new ViewModel();
+
+ko.applyBindings(myViewModel);
