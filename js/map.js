@@ -23,20 +23,20 @@ function initMap() {
 
     // Create a "highlighted location" marker color for when the user
     // mouses over the marker.
-    loadKmlLayer(src, map);
     setMarkers(map, myViewModel.koDistrictArray());
+    loadKmlLayer(src, map);
     infoWindow = new google.maps.InfoWindow({
     	content: 'Loading...'
     });
-    /*function toggleVisible(boolean) {
+    function toggleVisible(boolean) {
     	if (true) { 
-    		markers[x].setVisible(true);
+    		markers[x].visible(true);
 
     	} else {
-    		markers[x].setVisible(false);
+    		markers[x].visible(false);
     	}
 
-    };*/
+    };
 
 };
 
@@ -61,7 +61,7 @@ function setMarkers(map, markers)    {
 			title: districtArray.title,
 			html: districtArray.html,
 			animation: google.maps.Animation.DROP,
-			setVisible: true,
+			visible: true,
 			map: map,
 			id: i
 		});
@@ -455,7 +455,7 @@ function DisplayDistrict(location) {
     self.title = location.title;
     self.html = location.html;
     self.showDistrictTitle = ko.observable(true);
-    self.setVisible = true;
+    self.marker = location.marker;
 }
 
 var ViewModel = function() {
@@ -474,27 +474,27 @@ var ViewModel = function() {
 
     self.search = ko.computed(function(districts) {
         var value = self.query();
-        console.log(markers);
 
         for(var x in self.koDistrictArray()) {
           if(self.koDistrictArray()[x].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
             //show location
             self.koDistrictArray()[x].showDistrictTitle(true);
-            //markers[x].setVisible(true);
+            //self.koDistrictArray()[x].marker.setVisible(true);
 
         } else {
             //hide location
             self.koDistrictArray()[x].showDistrictTitle(false);
-           // markers[x].setVisible(false);
+            //self.koDistrictArray()[x].marker.setVisible(false);
         }
       }
     });
     self.passBounce = function(district) {
         toggleBounce(district.marker);
     };
-    
-};
 
+};
+console.log(districtArray);
+//setMarkers(map, districtArray);
 var myViewModel = new ViewModel();
 
 ko.applyBindings(myViewModel);
