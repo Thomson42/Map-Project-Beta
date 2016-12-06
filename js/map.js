@@ -1,7 +1,7 @@
 var map;
 var infoWindow = null;
 var bounds;
-var marker;
+var markers = [];
 
 
 var src = 'https://sites.google.com/site/votercompanion/HouseDistricts2.kmz';
@@ -19,13 +19,28 @@ function initMap() {
      //   styles: styles,
         mapTypeControl: false
     });
+    // Style the markers a bit. This will be our listing marker icon.
+
+    // Create a "highlighted location" marker color for when the user
+    // mouses over the marker.
     loadKmlLayer(src, map);
     setMarkers(map, myViewModel.koDistrictArray());
     infoWindow = new google.maps.InfoWindow({
     	content: 'Loading...'
     });
+    /*function toggleVisible(boolean) {
+    	if (true) { 
+    		markers[x].setVisible(true);
+
+    	} else {
+    		markers[x].setVisible(false);
+    	}
+
+    };*/
 
 };
+
+
     // These are the real estate listings that will be shown to the user.
     // Normally we'd have these in a database instead.
 
@@ -38,6 +53,7 @@ function setMarkers(map, markers)    {
 	// Get the position from the location array.
 		var districtArray = markers[i];
 		var distPosit = new google.maps.LatLng(districtArray.lat, districtArray.lng);
+
 		// Create a marker per location, and put into markers array.
 
 		var marker = new google.maps.Marker({
@@ -45,29 +61,46 @@ function setMarkers(map, markers)    {
 			title: districtArray.title,
 			html: districtArray.html,
 			animation: google.maps.Animation.DROP,
+			setVisible: true,
 			map: map,
 			id: i
 		});
 
         districtArray.marker = marker;
+        loadInfoWindow(marker);
+        /*marker.addListener('mouseover', function() {
+        	marker.setAnimation(google.maps.Animation.BOUNCE);
+        	window.setTimeout(function() {
+				marker.setAnimation(null);
+			}, 1400);
+        });*/
+    
+    
 
-//Critical object that formats the string used in my Info Window needs photo image, title, name, and Link
-	loadInfoWindow(marker);
-
-    //google.maps.event.addDomListener( marker.title, "click", infoWindow.open(marker));
-
-	// Push the marker to our array of markers.
 	}
+
 	
+    /*console.log(marker);
+    console.log(markers);
+	marker.addListener('mouseover', function() {
+		toggleBounce(marker);
+	});*/
 
-}
-/*function toggleBounce() {
-	if (marker.getAnimation() !== null) {
+};
+
+function toggleBounce(marker) {
+	marker.setAnimation(google.maps.Animation.BOUNCE);
+	window.setTimeout(function() {
 		marker.setAnimation(null);
-	} else {
-		marker.setAnimation(google.maps.Animation.BOUNCE);
-	}
-}*/
+	}, 1400);
+};
+
+/*function toggleVisible(marker) {
+    google.maps.event.trigger(marker, 'click', function() {
+
+    });
+
+};*/
 function loadInfoWindow(marker) {
     google.maps.event.addListener(marker, 'click', function() {
     // where I have added .html to the marker object.
@@ -89,14 +122,15 @@ function loadKmlLayer(src, map) {
 	   map: map,
        suppressInfoWindows: true,
        scaleControl: false,
-       zoomControl: false
+       zoomControl: false,
+       clickable: false
     });
 
 };
 var districtArray = [
 	{
 		lat: 42.879857, lng: -124.176448, 
-		title:'House District 1', 
+		title:'House District 01', 
         html:'<div id="content">'+
             '<div id="siteNotice">'+
             '</div>'+
@@ -120,42 +154,42 @@ var districtArray = [
 	},
 	{
     	lat: 42.889406, lng: -123.18768, 
-    	title:'House District 2',
+    	title:'House District 02',
         html:'Discription2'
     },
     {
         lat: 42.267278, lng: -123.484847, 
-        title:'House District 3',
+        title:'House District 03',
         html:'Discription3'
     },
     {
         lat: 42.395083, lng: -123.105353, 
-        title:'House District 4',
+        title:'House District 04',
         html:'Discription4'
     },
     {
         lat: 42.174025, lng: -122.759428, 
-        title:'House District 5',
+        title:'House District 05',
         html:'Discription5'
     },
     {
         lat: 42.335308, lng: -122.854325, 
-        title:'House District 6',
+        title:'House District 06',
         html:'Discription6'
     },
     {
         lat: 43.517622, lng: -122.792728, 
-        title:'House District 7',
+        title:'House District 07',
         html:'Discription7'
     },
     {
         lat: 43.986553, lng: -123.388908, 
-        title:'House District 8',
+        title:'House District 08',
         html:'Discription8'
     },
     {
         lat: 43.825914, lng: -123.956883, 
-        title:'House District 9',
+        title:'House District 09',
         html:'Discription9'
     },
     {
@@ -414,29 +448,52 @@ var districtArray = [
         html:'Discription60'
     }];
 
+function DisplayDistrict(location) {
+    var self = this;
+    self.lat = location.lat;
+    self.lng = location.lng;
+    self.title = location.title;
+    self.html = location.html;
+    self.showDistrictTitle = ko.observable(true);
+    self.setVisible = true;
+}
+
 var ViewModel = function() {
     var self = this;
     self.koDistrictArray = ko.observableArray();
 
     districtArray.forEach(function(district) {
-        self.koDistrictArray.push(district);
+        var interactiveDistricts = new DisplayDistrict(district);
+        self.koDistrictArray.push(interactiveDistricts);
     });
 
-    self.selectMarker = function(marker) {
-        console.log(marker);
-        selectInfoWindow(marker);
+    self.selectMarker = function(district) {
+        selectInfoWindow(district.marker);
     };
     self.query = ko.observable('');
 
-    self.search = function(value) {
-        for(var x in koDistrictArray) {
-          if(koDistrictArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-            viewModel.koDistrictArray.push(koDistrictArray[x]);
+    self.search = ko.computed(function(districts) {
+        var value = self.query();
+        console.log(markers);
+
+        for(var x in self.koDistrictArray()) {
+          if(self.koDistrictArray()[x].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+            //show location
+            self.koDistrictArray()[x].showDistrictTitle(true);
+            //markers[x].setVisible(true);
+
+        } else {
+            //hide location
+            self.koDistrictArray()[x].showDistrictTitle(false);
+           // markers[x].setVisible(false);
         }
       }
-    }
+    });
+    self.passBounce = function(district) {
+        toggleBounce(district.marker);
+    };
+    
 };
-//ViewModel.query.subscribe(ViewModel.search);
 
 var myViewModel = new ViewModel();
 

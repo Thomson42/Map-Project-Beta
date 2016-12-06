@@ -15,6 +15,7 @@
 
       input {
         font-size: 12px;
+        min-width: 250px;
       }
 
       h1 {
@@ -36,8 +37,11 @@
         border: none;
       }
       ul {
-        height: 500px;
-        overflow: scroll;
+        height: 80%;
+        overflow-y: scroll;
+      }
+      li {
+        max-width: 140px
       }
 
       #map {
@@ -91,10 +95,6 @@
       <div class="options-box">
         <h1>Find Your Oregon House District</h1>
         <div>
-          <input id="show-districts" type="button" value="Show Districts">
-          <input id="hide-districts" type="button" value="Hide Districts">          
-        </div>
-        <hr>
         <!-- code sample adapted from Brandon Keepers at:
         http://opensoul.org/2011/06/23/live-search-with-knockoutjs/-->
         <form action="#">
@@ -102,7 +102,7 @@
         </form>
         <div>
         <ul data-bind="foreach: koDistrictArray">
-          <li data-bind="text: title, click: $parent.selectMarker"></li>
+          <li data-bind="text: title, event: {mouseover: $parent.passBounce}, click: $parent.selectMarker, visible: showDistrictTitle"></li>
         </ul>
         </div>
       </div>
