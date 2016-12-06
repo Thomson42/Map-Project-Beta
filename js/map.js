@@ -21,8 +21,8 @@ function initMap() {
     });
     // Style the markers a bit. This will be our listing marker icon.
 
-    // Create a "highlighted location" marker color for when the user
-    // mouses over the marker.
+    //-----READ THIS-----> this setMarkers will need to be moved to change when markers are visible 
+    //but I have yet to determin where I will need to do that. 
     setMarkers(map, myViewModel.koDistrictArray());
     loadKmlLayer(src, map);
     infoWindow = new google.maps.InfoWindow({
@@ -493,8 +493,10 @@ var ViewModel = function() {
     };
 
 };
-console.log(districtArray);
-//setMarkers(map, districtArray);
+console.log(myViewModel.koDistrictArray());
+//-----READ THIS-----> this setMarkers function is the one recomended but breaks the actual 
+//setMarkers function because it needs the aditonal objects found in the knockout array
+//setMarkers(map, myViewModel.koDistrictArray());
 var myViewModel = new ViewModel();
 
 ko.applyBindings(myViewModel);
