@@ -4,7 +4,7 @@ var bounds;
 var markers = [];
 
 
-var src = 'https://sites.google.com/site/votercompanion/HouseDistricts2.kmz';
+var src = 'https://sites.google.com/site/votercompanion/HouseDistricts.kmz?';
 
 function initMap() {
     bounds = new google.maps.LatLngBounds();
@@ -15,28 +15,19 @@ function initMap() {
             lat: 44.281712,
             lng: -120.571651
         },
-        zoom: 10,
+        zoom: 7,
      //   styles: styles,
         mapTypeControl: false
     });
     // Style the markers a bit. This will be our listing marker icon.
 
-    //-----READ THIS-----> this setMarkers will need to be moved to change when markers are visible 
-    //but I have yet to determin where I will need to do that. 
-    setMarkers(map, myViewModel.koDistrictArray());
+    
+    setMarkers(map, districtArray);
+    ko.applyBindings(new ViewModel());
     loadKmlLayer(src, map);
     infoWindow = new google.maps.InfoWindow({
     	content: 'Loading...'
     });
-    function toggleVisible(boolean) {
-    	if (true) { 
-    		markers[x].visible(true);
-
-    	} else {
-    		markers[x].visible(false);
-    	}
-
-    };
 
 };
 
@@ -68,24 +59,7 @@ function setMarkers(map, markers)    {
 
         districtArray.marker = marker;
         loadInfoWindow(marker);
-        /*marker.addListener('mouseover', function() {
-        	marker.setAnimation(google.maps.Animation.BOUNCE);
-        	window.setTimeout(function() {
-				marker.setAnimation(null);
-			}, 1400);
-        });*/
-    
-    
-
 	}
-
-	
-    /*console.log(marker);
-    console.log(markers);
-	marker.addListener('mouseover', function() {
-		toggleBounce(marker);
-	});*/
-
 };
 
 function toggleBounce(marker) {
@@ -94,13 +68,6 @@ function toggleBounce(marker) {
 		marker.setAnimation(null);
 	}, 1400);
 };
-
-/*function toggleVisible(marker) {
-    google.maps.event.trigger(marker, 'click', function() {
-
-    });
-
-};*/
 function loadInfoWindow(marker) {
     google.maps.event.addListener(marker, 'click', function() {
     // where I have added .html to the marker object.
@@ -479,12 +446,12 @@ var ViewModel = function() {
           if(self.koDistrictArray()[x].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
             //show location
             self.koDistrictArray()[x].showDistrictTitle(true);
-            //self.koDistrictArray()[x].marker.setVisible(true);
+            self.koDistrictArray()[x].marker.setVisible(true);
 
         } else {
             //hide location
             self.koDistrictArray()[x].showDistrictTitle(false);
-            //self.koDistrictArray()[x].marker.setVisible(false);
+            self.koDistrictArray()[x].marker.setVisible(false);
         }
       }
     });
@@ -493,10 +460,3 @@ var ViewModel = function() {
     };
 
 };
-console.log(myViewModel.koDistrictArray());
-//-----READ THIS-----> this setMarkers function is the one recomended but breaks the actual 
-//setMarkers function because it needs the aditonal objects found in the knockout array
-//setMarkers(map, myViewModel.koDistrictArray());
-var myViewModel = new ViewModel();
-
-ko.applyBindings(myViewModel);
