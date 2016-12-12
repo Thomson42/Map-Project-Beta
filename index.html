@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title></title>
-
     <style>
 
       html,
@@ -20,6 +15,7 @@
 
       input {
         font-size: 12px;
+        min-width: 250px;
       }
 
       h1 {
@@ -39,6 +35,13 @@
         height: 1px;
         margin: 20px 0 20px 0;
         border: none;
+      }
+      ul {
+        height: 80%;
+        overflow-y: scroll;
+      }
+      li {
+        max-width: 140px
       }
 
       #map {
@@ -85,31 +88,32 @@
       }
     </style>
     <script src="js/knocks/knockout-3.4.0.js"></script>
+    
   </head>
   <body>
     <div class="container">
       <div class="options-box">
         <h1>Find Your Oregon House District</h1>
         <div>
-          <input id="show-districts" type="button" value="Show Districts">
-          <input id="hide-districts" type="button" value="Hide Districts">          
-        </div>
-        <hr>
+        <!-- code sample adapted from Brandon Keepers at:
+        http://opensoul.org/2011/06/23/live-search-with-knockoutjs/-->
+        <form action="#">
+          <input data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off" type="search" placeholder="Enter the district your looking for!">
+        </form>
         <div>
-          <input id="zoom-to-area-text" type="text" placeholder="Enter your home adress!">
-          <input id="zoom-to-area" type="button" value="Search">
+        <ul data-bind="foreach: koDistrictArray">
+          <li data-bind="text: title, event: {mouseover: $parent.passBounce}, click: $parent.selectMarker, visible: showDistrictTitle"></li>
+        </ul>
         </div>
       </div>
-
-      <!-- list view -->
-      <!-- http://knockoutjs.com/documentation/foreach-binding.html -->
-      
       <div id="map"></div>
     </div>
     <script src="js/map.js"></script>
+    <script src="js/main.js"></script>
+    
 
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?libraries=geometry,drawing&key=[YOUR_API_KEY]&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?libraries=geometry,drawing&key=AIzaSyBKVPJXwoLKC0idf4jDh5RxwqcQxIPlq90&callback=initMap&libraries=places&v=3&callback=initMap">
     </script>
 
   </body>
