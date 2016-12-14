@@ -414,7 +414,13 @@ var districtArray = [
         title:'House District 60',
         html:'Discription60'
     }];
+//The incomplete ajax request with incomplete url string
+$.ajax('http://api.votesmart.org/docs/CandidateBio.getBio?key=011c5adb36d0e7b3335a1f1e0f5bb94a&candidateId=9490',[{
+	accepts: {
 
+	},
+	dataType: 'JASON'
+}]);
 function DisplayDistrict(location) {
     var self = this;
     self.lat = location.lat;
