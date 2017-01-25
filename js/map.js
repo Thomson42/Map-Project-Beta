@@ -70,7 +70,7 @@ function toggleBounce(marker) {
 function loadInfoWindow(marker) {
     google.maps.event.addListener(marker, 'click', function() {
     // where I have added .html to the marker object.
-    	ViewModel.currentLocation(location);
+    	ViewModel.currentLocation(marker);
         infoWindow.setContent(this.html);
         infoWindow.open(map, this);
     });
@@ -492,7 +492,7 @@ $.ajax({
   	var firstResponse = response[1][0];
   	console.log(response[1][0]);
   	var infoContent = '<div id="content">'+'<div id="siteNotice">'+'</div>'+
-            '<h1 id="firstHeading" class="firstHeading">'+firstResponse+'</h1>';
+            '<h1 id="firstHeading" class="firstHeading">'+firstResponse+'</h1>'+'</div>';
 
   	for (var i = 0; i < districtArray.length; i++) {
   		articleStr = districtArray[i];
@@ -525,7 +525,7 @@ var ViewModel = function() {
         var interactiveDistricts = new DisplayDistrict(district);
         self.koDistrictArray.push(interactiveDistricts);
     });
-    this.currentLocation = ko.observable(this.locations()[0]);
+    this.currentLocation = ko.observable(this.koDistrictArray()[0]);
 
     self.selectMarker = function(district) {
         selectInfoWindow(district.marker);
