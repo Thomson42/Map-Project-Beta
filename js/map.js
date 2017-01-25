@@ -61,7 +61,6 @@ function setMarkers(map, markers)    {
         loadInfoWindow(marker);
 	}
 };
-
 function toggleBounce(marker) {
 	marker.setAnimation(google.maps.Animation.BOUNCE);
 	window.setTimeout(function() {
@@ -71,6 +70,7 @@ function toggleBounce(marker) {
 function loadInfoWindow(marker) {
     google.maps.event.addListener(marker, 'click', function() {
     // where I have added .html to the marker object.
+    	ViewModel.currentLocation(location);
         infoWindow.setContent(this.html);
         infoWindow.open(map, this);
     });
@@ -474,10 +474,13 @@ var districtArray = [
         html:'Discription60',
         representative: 'Cliff Bentz'
     }];
-//var wikiUrl = 'http://en.wikipedia.org/w/api/php?action=opensearch&search='+ representative +'&format=json&callback=wikiCallback'
+
+var representative = 'Oregon_House_of_Representatives';
+
+var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+ representative +'&format=json&callback=wikiCallback'
 $.ajax({
-  url:'https://en.wikipedia.org/wiki/api/php?action=opensearch&search=Oregon_House_of_Representatives&format=json&callback=wikiCallback',
-  // "https://www.googleapis.com/civicinfo/v2/representatives?key=AIzaSyAFyyWOX_kolbLF1_-4dUi7ENyLB600qFY&address=1263%20Pacific%20Ave.%20Kansas%20City%20KS",
+  url:wikiUrl,
+  //"https://www.googleapis.com/civicinfo/v2/representatives?key=AIzaSyAFyyWOX_kolbLF1_-4dUi7ENyLB600qFY&address=1263%20Pacific%20Ave.%20Kansas%20City%20KS",
   //may be harmfull
   dataType: 'jsonp',
   //method: "GET",
@@ -485,13 +488,16 @@ $.ajax({
   //  address: location.title,
   //  location: "Boston"
   //}
-  scucess: function(response) {
-  	var firstResponse = response[1];
+  success: function(response) {
+  	var firstResponse = response[1][0];
+  	console.log(response[1][0]);
+  	var infoContent = '<div id="content">'+'<div id="siteNotice">'+'</div>'+
+            '<h1 id="firstHeading" class="firstHeading">'+firstResponse+'</h1>';
 
   	for (var i = 0; i < districtArray.length; i++) {
   		articleStr = districtArray[i];
-  		var infoContent = '<p>Attribution: Oregon House of Representatives, <a href=' + firstResponse + '</a>';
-  		$districtArray.html.append(infoContent);
+  		districtArray[i].html.replace(infoContent);
+  		console.log(districtArray[1].html);
   	}
   }
 //}).done(function(result) {
@@ -512,12 +518,14 @@ function DisplayDistrict(location) {
 
 var ViewModel = function() {
     var self = this;
+
     self.koDistrictArray = ko.observableArray();
 
     districtArray.forEach(function(district) {
         var interactiveDistricts = new DisplayDistrict(district);
         self.koDistrictArray.push(interactiveDistricts);
     });
+    this.currentLocation = ko.observable(this.locations()[0]);
 
     self.selectMarker = function(district) {
         selectInfoWindow(district.marker);
