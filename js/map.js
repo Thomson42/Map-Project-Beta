@@ -525,7 +525,7 @@ var ViewModel = function() {
         var interactiveDistricts = new DisplayDistrict(district);
         self.koDistrictArray.push(interactiveDistricts);
     });
-    this.currentLocation = ko.observable(this.locations()[0]);
+    this.currentLocation = ko.observable(this.koDistrictArray()[0]);
 
     self.selectMarker = function(district) {
         selectInfoWindow(district.marker);
