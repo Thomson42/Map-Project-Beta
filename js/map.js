@@ -70,7 +70,6 @@ function toggleBounce(marker) {
 function loadInfoWindow(marker) {
     google.maps.event.addListener(marker, 'click', function() {
     // where I have added .html to the marker object.
-    	ViewModel.currentLocation(location);
         infoWindow.setContent(this.html);
         infoWindow.open(map, this);
     });
