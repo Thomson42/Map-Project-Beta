@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <style>
@@ -119,6 +119,10 @@
       h1 {
         font-size: 28px;
       }
+      li.open {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);        
+      }
         
       }
       </style>
@@ -153,23 +157,5 @@
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?libraries=geometry,drawing&key=AIzaSyBKVPJXwoLKC0idf4jDh5RxwqcQxIPlq90&callback=initMap&libraries=places&v=3&callback=initMap"onerror="googleError()">
     </script>
-    <script>
-      /*
-       * Open the drawer when the menu ison is clicked.
-       */
-      var menu = document.querySelector('#menu');
-      var body = document.querySelector('body');
-      var drawer = document.querySelector('#drawer');
-      var map = document.querySelector('#map');
-
-      menu.addEventListener('click', function(e) {
-        body.classList.toggle('open');
-        e.stopPropagation();
-      });
-      map.addEventListener('click', function() {
-        body.classList.remove('open');
-      });
-    </script>
-
   </body>
 </html>
