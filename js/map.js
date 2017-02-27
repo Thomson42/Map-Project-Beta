@@ -1,61 +1,41 @@
-var map;
-var infoWindow = null;
-var bounds;
-var markers = [];
-var infoContent = '';
-var menu = document.querySelector('#menu');
-var main = document.querySelector('main');
-var drawer = document.querySelector('#drawer');
-/*
-menu.addEventListener('click', function(e) {
-	drawer.classList.toggle('open');
-	e.stopPropagation();
-});
-main.addEventListener('click', function() {
-	drawer.classList.remove('open');
-});*/
+//Welcome to the core JavaScript code for The Voter companion website.
+//This is a submitted "neighborhood map" project for Udacity's Web development course
+//All comments on the exact nature of each piece of code have been made above the code in question.
 
-
-
-
-var src = 'https://sites.google.com/site/votercompanion/HouseDistricts.kmz?';
+//This is an error handling function referenced in src script
 function googleError() {
 	alert("Failed to load google maps.")
 }
+//initializes the origonal paramaters of the Map DOM.
 function initMap() {
     bounds = new google.maps.LatLngBounds();
-    // Create a styles array to use with the map.
-    // Constructor creates a new map - only center and zoom are required.
+    // Creates the starting map view
     map = new google.maps.Map(document.getElementById('map'), {
         center: {
             lat: 44.281712,
             lng: -120.571651
         },
         zoom: 7,
-     //   styles: styles,
         mapTypeControl: false
     });
-    // Style the markers a bit. This will be our listing marker icon.
+    //calls the setMarkesr function so that we can combine it with the distirctArray to populate the map
     setMarkers(map, districtArray);
+    //calls a new instance of the knockout ViewModel connecting the view with the modle 
     ko.applyBindings(new ViewModel());
+    //creates a new webadress object and submits it to the loadKmlLayer function
+    //loadKmlLayer then renders the submitted data.
+    var src = 'https://sites.google.com/site/votercompanion/HouseDistricts.kmz?';
     loadKmlLayer(src, map);
     
 
 };
-
-
-    // These are the real estate listings that will be shown to the user.
-    // Normally we'd have these in a database instead.
-
-    // This function populates the infowindow when the marker is clicked. We'll only allow
-    // one infowindow which will open at the marker that is clicked, and populate based
-    // on that markers position.
 
 function setMarkers(map, markers)    {
 	for (var i = 0; i < markers.length; i++) {
 	// Get the position from the location array.
 		var districtArray = markers[i];
 		var distPosit = new google.maps.LatLng(districtArray.lat, districtArray.lng);
+		//Creats a new infoContent object designed as a placehodler infoWindow untill the AJAX can load
 		var infoContent = markers[i].html = ko.observable('pending search');
 
 		// Create a marker per location, and put into markers array.
@@ -73,6 +53,7 @@ function setMarkers(map, markers)    {
 		infoWindow = new google.maps.InfoWindow();
 
         districtArray.marker = marker;
+        //Adds on click bounce and infoWindow popup functionality
         marker.addListener('click', function() {
         	var marker = this;
         	loadInfoWindow(marker, infoWindow);
@@ -80,60 +61,54 @@ function setMarkers(map, markers)    {
         })
 	}
 };
+//enables google map's bounce feature
 function toggleBounce(marker) {
 	marker.setAnimation(google.maps.Animation.BOUNCE);
 	window.setTimeout(function() {
 		marker.setAnimation(null);
 	}, 1400);
 };
+ // This function populates the infowindow when the marker is clicked. We'll only allow
+ // one infowindow which will open at the marker that is clicked, and populate based
+ // on that markers position.
 function loadInfoWindow(marker, infoWindow) {
 	if (marker.html() === "pending search") {
 		infoWindow.setContent(marker.html());
 		infoWindow.open(map, marker);
 		var representative = marker.rep;
-
-		var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+ representative +'&format=json&callback=wikiCallback'
-		 
+		//creates the url string for the ajax request to submit too.
+		var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+
+		 representative +'&format=json&callback=wikiCallback'
+		//starts the ajax request 
 		$.ajax({
 		  url:wikiUrl,
-		  //"https://www.googleapis.com/civicinfo/v2/representatives?key=AIzaSyAFyyWOX_kolbLF1_-4dUi7ENyLB600qFY&address=1263%20Pacific%20Ave.%20Kansas%20City%20KS",
-		  //may be harmfull
 		  dataType: 'jsonp',
-		  //method: "GET",
-		  //data: { 
-		  //  address: location.title,
-		  //  location: "Boston"
-		  //}
-		 // success: function(response) {		  
-		 // }
-
-
-		//}).done(function(result) {
-		//  console.log(result);
-		//});.fail(funciton(error) {
-		//	alert('error message');
 
 		}).done(function(response) {
-			console.log(response);
+			//once the ajax request is complete a new set of objects is made from the received  array
+			//and added into a srtring.
 			var firstResponse = response[1][0];
 			var secondResponse = response[2][0];
 			var webLink = response[3][0];
 			var infoContent = '<div id="content">' + '<div id="siteNotice">' + '</div>' +
 	            '<h1 id="firstHeading" class="firstHeading">' + marker.title + '</h1>' + '</div>' +
-	            '<div id="bodyContent">' + '<h1 id="secondHeading" class="secondHeading">'+ firstResponse + '</h1>' +
-	            '<p>' + secondResponse + '</p>' + '<p>Attribution:' +
+	            '<div id="bodyContent">' + '<h1 id="secondHeading" class="secondHeading">'
+	            + firstResponse + '</h1>' +'<p>' + secondResponse + '</p>' + '<p>Attribution:' +
 	            firstResponse + ', <a href="' + webLink + '">' + webLink + '</a>' + '</div>'; 
 	        marker.html(infoContent);
 	        infoWindow.setContent(marker.html());
+	        //The ajax request ends with a failed responce option built in, 
+	        //in the event that no data is recived.
 		}).fail (function(response) {
 			alert("Failed to load representative data");
 		});
-			
+	//an else statement that prevents redundant ajax querys 
 	} else {
 		infoWindow.setContent(marker.html());
 		infoWindow.open(map, marker);
 	}
   };
+//The function that allows dom element clicks to register on the map
 function selectInfoWindow(marker) {
     google.maps.event.trigger(marker, 'click', function() {
     	console.log(this.html);
@@ -141,7 +116,7 @@ function selectInfoWindow(marker) {
         google.maps.infoWindow.open(map, this);
     });
 };
-
+//The function that loads all the features of the KML layer src submitted.
 function loadKmlLayer(src, map) {
 	var kmlLayer = new google.maps.KmlLayer(src, {
 	   preserveViewport: false,
@@ -153,30 +128,12 @@ function loadKmlLayer(src, map) {
     });
 
 };
+//The entire array of 60 Oregon house districts
 var districtArray = [
 	{
 		lat: 42.879857, lng: -124.176448, 
 		title:'House District 01', 
-        html:'<div id="content">'+
-            '<div id="siteNotice">'+
-            '</div>'+
-            '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
-            '<div id="bodyContent">'+
-            '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-            'sandstone rock formation in the southern part of the '+
-            'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
-            'south west of the nearest large town, Alice Springs; 450&#160;km '+
-            '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
-            'features of the Uluru - Kata Tjuta National Park. Uluru is '+
-            'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
-            'Aboriginal people of the area. It has many springs, waterholes, '+
-            'rock caves and ancient paintings. Uluru is listed as a World '+
-            'Heritage Site.</p>'+
-            '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
-            'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
-            '(last visited June 22, 2009).</p>'+
-            '</div>'+
-            '</div>',
+        html:'Discription1',
         representative: 'Wayne_Krieger'
 	},
 	{
@@ -533,7 +490,7 @@ var districtArray = [
         html:'Discription60',
         representative: 'Cliff_Bentz'
     }];
-
+//A constructor function that adds the showDistrictTitle feature as a ko.observable
 function DisplayDistrict(location) {
     var self = this;
     self.lat = location.lat;
@@ -543,28 +500,46 @@ function DisplayDistrict(location) {
     self.showDistrictTitle = ko.observable(true);
     self.marker = location.marker;
 };
-
+//the View Model that acts as an intermediary between the View and the data
 var ViewModel = function() {
     var self = this;
+    //objects within the CSS in need of click funtionality
+    var menu = document.querySelector('#menu');
+	var body = document.querySelector('body');
+	var drawer = document.querySelector('#drawer');
+	var map = document.querySelector('#map');
+	var li = document.querySelector('li');
+	//allows the hamburger icon to be clicked revealing the search menu
+	menu.addEventListener('click', function(e) {
+		body.classList.toggle('open');
+		e.stopPropagation();
+	});
+	//allows the map to be clicked to close the search menu
+	map.addEventListener('click', function() {
+		body.classList.remove('open');
+	});
 
     self.html = ko.observable("");
-
+    //converts the district array into a observable array for knockout compatibility
     self.koDistrictArray = ko.observableArray();
-
+    //creates a new array from the constructor and makes is knockout compatible
     districtArray.forEach(function(district) {
         var interactiveDistricts = new DisplayDistrict(district);
         self.koDistrictArray.push(interactiveDistricts);
     });
     this.currentLocation = ko.observable(this.koDistrictArray()[0]);
-
+    //a ViewModle function that calls the selectInfoWindow function and allow clicks on the DOM to 
+    //rely to the Map
     self.selectMarker = function(district) {
         selectInfoWindow(district.marker);
+        body.classList.remove('open');
     };
     self.query = ko.observable('');
 
     self.search = ko.computed(function(districts) {
         var value = self.query();
-
+        //The forloop that checks for changes in the searchbar and 
+        //matches the resuts acording to the input automatically
         for(var x in self.koDistrictArray()) {
           if(self.koDistrictArray()[x].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
             //show location
@@ -578,6 +553,7 @@ var ViewModel = function() {
         }
       }
     });
+    //allows mouseovers of the district titles to bounce their corresponding district.
     self.passBounce = function(district) {
         toggleBounce(district.marker);
     };
