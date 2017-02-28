@@ -11,6 +11,9 @@ The hamburger button at the top left of the view pulls open a list of all Marker
 
 Finally any viewport that is smaller than 600 pixels wide will adjust the total space the menu takes and raises the font size for easier viewing.
 
+## Startup Requirements
+For testing and general modifications be sure to click the green clone or download button at the top right of your screen. Click the download Zip option. From there you may open the zip file and have acess to all nessary files. Double click the index.html and it should apear on you browser for local viewing.
+
 ## Project build Changelog
 * [First changes](https://github.com/Thomson42/Map-Project-Beta/commit/2ac442dae971ea3c99bb546efb1b7fc15291936a#diff-994c638c9246366a184723a4b41a0f3f)
   Built the groundwork for the KML layers to render properly. Requiring the building of a KMZ file to display all KML at once
